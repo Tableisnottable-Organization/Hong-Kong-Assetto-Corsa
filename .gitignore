@@ -1,0 +1,16 @@
+# Assetto Corsa generated server data
+server/logs/
+server/results/
+server/uploads/
+
+# Local installations and unpacked build output
+acServer/
+content/
+build/
+dist/
+
+# Editor and OS files
+.vscode/
+.idea/
+*.blend1
+Thumbs.db
