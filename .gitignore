@@ -10,6 +10,8 @@ build/
 dist/
 
 # Generated or downloaded map source files
+source/gis/raw/
+source/references/
 build/HP1C/source/roads.osm.json
 build/HP1C/source/roads.geojson
 build/HP1C/tin_kwong_road/*.fbx
@@ -21,4 +23,10 @@ __pycache__/
 .vscode/
 .idea/
 *.blend1
+*.bak
+*.kn5
+*.obj
+*.fbx
+*.7z
+*.zip
 Thumbs.db

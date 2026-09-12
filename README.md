@@ -2,15 +2,27 @@
 
 This repository is the starting point for a 1:1-scale Hong Kong free-roam map
 and an Assetto Corsa dedicated server that hosts it. The current map prototype
-targets the HP1C sheet `11-SW-9D` and the Tin Kwong Road driving-test routes.
+targets the HP1C sheet `11-SW-9D` and the Tin Kwong Road driving-test routes,
+with a wider target of roads covering Tsim Sha Tsui, Mong Kok, and Kowloon Bay.
 
-The repository contains source-controlled planning, map-generation tooling, and
-server configuration. It does **not** contain third-party map data,
-copyrighted imagery, Assetto Corsa game files, or the `acServer.exe` binary.
+## Project scope
+
+- **Map:** real-world-scale Kowloon roads built from geospatial data.
+- **Current route:** Tin Kwong Road routes one, two, and three.
+- **Vehicles:** original, legally distributable models representing cars seen
+  in Hong Kong. The first hero vehicle is a Hong Kong Crown Comfort taxi.
+- **Target game:** Assetto Corsa on PC.
+
+The repository contains source-controlled planning, map-generation tooling,
+vehicle manifests, and server configuration. It does **not** contain
+third-party map data, copyrighted imagery, Assetto Corsa game files, or the
+`acServer.exe` binary. Generated meshes, textures, and KN5 files remain out of
+Git unless they are small enough to review and redistribute.
 
 ## Repository layout
 
 ```text
+config/                              Map and vehicle manifests
 asset/assetto_corsa/tin_kwong_road/  Assetto Corsa track package skeleton
 asset/routes/                         Route definitions
 build/HP1C/                           Generated prototype output and manifests
@@ -60,7 +72,7 @@ oversized sheet, using names such as:
 ```
 
 Do not combine all Hong Kong roads, terrain, and buildings into one model.
-See `docs/map-production-plan.md` for the broader production and quality gates.
+See `docs/production-plan.md` for the broader production and quality gates.
 
 ## Dedicated server
 
@@ -82,10 +94,15 @@ See `docs/map-production-plan.md` for the broader production and quality gates.
 The default server is private (`REGISTER_TO_LOBBY=0`) until the track has been
 tested. Set it to `1` only after port forwarding and server moderation are ready.
 
-## Data and licensing
+## Vehicles and licensing
+
+The first hero vehicle is an original Hong Kong Crown Comfort taxi model.
+Additional traffic vehicles are tracked in `config/vehicles.json`. Do not rip
+assets from commercial games or use unlicensed manufacturer CAD. Keep OSM
+attribution with every exported release, and treat real-world branding as
+replaceable until permission is available.
 
 The route reference is the [TODS Kowloon driving-test route
 page](https://www.driving.com.hk/exam-routes-kowloon), updated in 2021. Recheck
 road positions, directions, and traffic facilities against current survey data
-before release. Use openly licensed or self-created source material and verify
-redistribution terms for every derived asset.
+before release.
