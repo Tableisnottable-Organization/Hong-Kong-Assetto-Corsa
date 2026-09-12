@@ -48,6 +48,16 @@ build\HP1C\source\
 
 然後呼叫 Blender 生成道路模型。Google Maps 不會被爬取；它只可作人工參考。輸出 KN5 前，電腦必須另外安裝 Blender 和 ksEditor，並把它們加入 `PATH`。目前這個工作環境沒有這兩個程式，所以已完成下載資料和自動化腳本，但尚未產生 `.blend` 或 `.kn5`。
 
+## 桌面匯出輔助
+
+如果 ksEditor 沒有可用的命令列匯出參數，可執行：
+
+```powershell
+.\tools\desktop_export.ps1
+```
+
+腳本會先要求輸入 `EXPORT`，用 Blender 將 `.blend` 匯出為 `11-SW-9D.fbx`，再開啟 ksEditor。它不會使用盲目滑鼠座標、不會自動覆蓋檔案，也不會代替使用者在 ksEditor 內確認輸出。完成後請在 ksEditor 將 FBX 匯出為 `11-SW-9D.kn5`。
+
 ## 資料來源及範圍
 
 路線轉向順序及頁面中的座標錨點來自 [TODS 九龍考車路線](https://www.driving.com.hk/exam-routes-kowloon)。該頁面的資料於 2021 年更新；正式發布前應以現時道路測量資料重新校準道路位置、方向及交通設施。
