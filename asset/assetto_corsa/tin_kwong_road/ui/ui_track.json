@@ -1,0 +1,10 @@
+{
+  "name": "天光道考試路線",
+  "description": "HP1C 圖幅 11-SW-9D；只包含天光道考試路線所需道路。",
+  "tags": ["Hong Kong", "Driving Test", "Tin Kwong Road", "HP1C"],
+  "country": "Hong Kong",
+  "city": "Kowloon",
+  "year": "2026",
+  "length": "survey-data-required",
+  "pitboxes": 1
+}
