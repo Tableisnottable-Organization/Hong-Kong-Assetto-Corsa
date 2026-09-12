@@ -1,3 +1,5 @@
+__pycache__/
+*.pyc
 build/
 source/gis/raw/
 source/references/
@@ -8,3 +10,7 @@ source/references/
 *.fbx
 *.7z
 *.zip
+build/HP1C/source/roads.osm.json
+build/HP1C/source/roads.geojson
+build/HP1C/tin_kwong_road/*.fbx
+build/HP1C/tin_kwong_road/*.blend1

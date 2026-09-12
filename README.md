@@ -1,51 +1,71 @@
 # Hong Kong Assetto Corsa
 
-An Assetto Corsa project for a 1:1-scale driving map of Kowloon, initially
-covering Tsim Sha Tsui, Mong Kok, and Kowloon Bay.
+An Assetto Corsa project for a 1:1-scale driving map of Hong Kong. The current
+production slice is the HP1C Tin Kwong Road driving-test corridor in Kowloon,
+with the wider target of a road network covering Tsim Sha Tsui, Mong Kok, and
+Kowloon Bay.
 
 ## Project scope
 
-- **Map:** Kowloon road network, built at real-world scale from geospatial data.
-- **Initial area:** Tsim Sha Tsui -> Mong Kok -> Kowloon Bay.
-- **Vehicles:** a growing set of original, legally distributable models
-  representing cars that are commonly seen in Hong Kong. The first vehicle
-  target is the Hong Kong Toyota Crown Comfort taxi.
+- **Map:** real-world-scale Kowloon roads built from geospatial data.
+- **Current route:** Tin Kwong Road routes one, two, and three.
+- **Vehicles:** original, legally distributable models representing cars seen
+  in Hong Kong. The first hero vehicle is a Hong Kong Crown Comfort taxi.
 - **Target game:** Assetto Corsa on PC.
 
 The repository stores source data, Blender tooling, configuration, and
-documentation. Generated meshes, textures, and KN5 files should remain out of
-Git unless they are small enough to review and redistribute.
+documentation. Generated meshes, textures, and KN5 files remain out of Git
+unless they are small enough to review and redistribute.
 
-## Current status
+## Current map pipeline
 
-This is the production scaffold. No map or vehicle mesh has been generated yet.
-The build order and required inputs are documented in
-[`docs/production-plan.md`](docs/production-plan.md).
+The HP1C map is exported by survey-sheet tile. Each tile is a separate KN5
+model and `tile_manifest.json` records its load order. Keep each model below
+the 1.5 GB target, with 2 GB treated as the hard single-file limit. Split a
+tile only when it exceeds that limit, using names such as
+`11-SW-9D-1.kn5`.
 
-## Source-data rules
+Generate the Blender prototype:
 
-Use OpenStreetMap or another source whose license permits redistribution, and
-keep attribution with every exported release. Do not rip assets from Google
-Maps, Street View, commercial games, or manufacturer websites. Real-world
-vehicle names and logos may require separate permission; use original geometry
-and replaceable branding for public releases.
+```powershell
+blender --background --python tools\blender\generate_tin_kwong.py
+```
+
+Or run the guarded download-and-build flow:
+
+```powershell
+.\tools\build_map.ps1
+```
+
+The downloader uses a local cache, one request at a time, a minimum 15-second
+interval, and backoff retries. It does not scrape Google Maps or Street View.
+Blender and ksEditor must be installed separately for KN5 export. If ksEditor
+has no usable command-line export mode, use:
+
+```powershell
+.\tools\desktop_export.ps1
+```
+
+That helper requires explicit `EXPORT` confirmation, avoids blind mouse
+coordinates and overwrites, and leaves final KN5 confirmation to the user.
+
+## Production plan
+
+The broader map build order, scale rules, vehicle requirements, and quality
+gates are documented in [`docs/production-plan.md`](docs/production-plan.md).
+The map and fleet manifests live in `config/`.
+
+Do not rip assets from commercial games or use unlicensed manufacturer CAD.
+Keep OSM attribution with every exported release, and treat real-world
+branding as replaceable until permission is available.
 
 ## Repository layout
 
 ```text
 config/                 Project scope and asset manifests
 docs/                   Production and contribution notes
-tools/blender/          Blender-side export helpers
-content/tracks/         Local Assetto Corsa track package files
-content/cars/           Local Assetto Corsa car package files
-source/                 Source GIS, reference, and Blender files
+tools/                  GIS, Blender, and export helpers
+asset/                  Assetto Corsa package files and route data
 build/                  Generated exports (ignored by Git)
+source/                 Source GIS, reference, and Blender files
 ```
-
-## First milestone
-
-1. Export the selected Kowloon road network and validate scale.
-2. Produce a drivable greybox with named sectors and collision.
-3. Create the taxi as an original low-poly-to-high-poly vehicle asset.
-4. Export both assets to KN5 and validate them in Assetto Corsa.
-
