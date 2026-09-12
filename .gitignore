@@ -1,0 +1,10 @@
+build/
+source/gis/raw/
+source/references/
+*.blend1
+*.bak
+*.kn5
+*.obj
+*.fbx
+*.7z
+*.zip

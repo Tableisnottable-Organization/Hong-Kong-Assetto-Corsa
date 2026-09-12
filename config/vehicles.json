@@ -1,0 +1,59 @@
+{
+  "project": "hk_kowloon",
+  "policy": {
+    "source_geometry_must_be_redistributable": true,
+    "branding_is_replaceable": true,
+    "units": "meters"
+  },
+  "vehicles": [
+    {
+      "id": "hk_taxi_crown_comfort",
+      "display_name": "Hong Kong taxi - Crown Comfort type",
+      "role": "hero",
+      "priority": 1,
+      "source_status": "original_model_required",
+      "target_lods": ["lod_a", "lod_b", "lod_c"],
+      "required_features": [
+        "right_hand_drive",
+        "automatic_transmission",
+        "working_headlights",
+        "working_brake_lights",
+        "taxi_livery_material",
+        "interior_camera"
+      ]
+    },
+    {
+      "id": "hk_family_van",
+      "display_name": "Hong Kong family MPV",
+      "role": "traffic",
+      "priority": 2,
+      "source_status": "original_model_required",
+      "target_lods": ["lod_b", "lod_c"]
+    },
+    {
+      "id": "hk_compact_sedan",
+      "display_name": "Hong Kong compact sedan",
+      "role": "traffic",
+      "priority": 2,
+      "source_status": "original_model_required",
+      "target_lods": ["lod_b", "lod_c"]
+    },
+    {
+      "id": "hk_light_goods_vehicle",
+      "display_name": "Hong Kong light goods vehicle",
+      "role": "traffic",
+      "priority": 3,
+      "source_status": "original_model_required",
+      "target_lods": ["lod_b", "lod_c"]
+    },
+    {
+      "id": "hk_double_decker_bus",
+      "display_name": "Hong Kong double-decker bus type",
+      "role": "traffic",
+      "priority": 3,
+      "source_status": "original_model_required",
+      "target_lods": ["lod_b", "lod_c"]
+    }
+  ]
+}
+
