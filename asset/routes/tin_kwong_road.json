@@ -1,0 +1,65 @@
+{
+  "map": "tin_kwong_road",
+  "display_name": "天光道考試路線",
+  "survey_group": "HP1C",
+  "sheet": "11-SW-9D",
+  "extraction": "required_road_corridor_only",
+  "shared_road": true,
+  "source": "https://www.driving.com.hk/exam-routes-kowloon",
+  "routes": [
+    {
+      "id": "tin_kwong_1",
+      "display_name": "天光道路線一",
+      "instructions": [
+        "試埸開出",
+        "左轉天光道",
+        "右轉靠背窩道",
+        "左轉落山道",
+        "右轉美善同道",
+        "右轉靠江蘇街",
+        "右轉靠背窩道",
+        "左轉天光道",
+        "右轉常康街",
+        "調頭操作",
+        "左轉常盛街",
+        "左轉天光道",
+        "右轉入試場"
+      ]
+    },
+    {
+      "id": "tin_kwong_2",
+      "display_name": "天光道路線二",
+      "instructions": [
+        "試埸開出",
+        "左轉天光道",
+        "右轉常盛街",
+        "右轉常康街",
+        "調頭操作",
+        "左轉常盛街",
+        "右轉天光道",
+        "左轉馬頭圍道",
+        "左轉農圃道",
+        "右轉天光道",
+        "右轉入試場"
+      ]
+    },
+    {
+      "id": "tin_kwong_3",
+      "display_name": "天光道路線三",
+      "instructions": [
+        "試埸開出",
+        "右轉天光道",
+        "左轉亞皆老街",
+        "左轉嘉齡道",
+        "右轉巴富街",
+        "左轉石鼓街",
+        "左轉常盛街",
+        "右轉常康街",
+        "調頭操作",
+        "左轉常盛街",
+        "左轉天光道",
+        "右轉入試場"
+      ]
+    }
+  ]
+}

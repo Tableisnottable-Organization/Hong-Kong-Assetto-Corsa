@@ -1,0 +1,31 @@
+{
+  "map": "tin_kwong_road",
+  "survey_group": "HP1C",
+  "sheet": "11-SW-9D",
+  "sources": [
+    {
+      "name": "OpenStreetMap Overpass",
+      "url": "https://overpass-api.de/api/interpreter",
+      "purpose": "road centerline and road names",
+      "license": "ODbL 1.0"
+    },
+    {
+      "name": "Hong Kong GeoInfo Map",
+      "url": "https://www.map.gov.hk/gm/",
+      "purpose": "official visual and coordinate reference"
+    },
+    {
+      "name": "Lands Department eHongKongStreet",
+      "url": "https://www.landsd.gov.hk/tc/resources/mapping-information/ehkg.html",
+      "purpose": "official GeoPDF map reference"
+    }
+  ],
+  "google_maps": "manual_reference_only_no_download",
+  "request_policy": {
+    "concurrent_requests": 1,
+    "minimum_interval_seconds": 15,
+    "retries": 3,
+    "cache_enabled": true
+  },
+  "downloaded_at_utc": "2026-09-12T20:51:58Z"
+}

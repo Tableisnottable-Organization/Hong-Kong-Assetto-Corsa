@@ -1,0 +1,4 @@
+__pycache__/
+*.pyc
+build/HP1C/source/roads.osm.json
+build/HP1C/source/roads.geojson

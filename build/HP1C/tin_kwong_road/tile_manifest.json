@@ -1,0 +1,40 @@
+{
+  "map": "tin_kwong_road",
+  "display_name": "天光道考試路線",
+  "survey_group": "HP1C",
+  "sheet": "11-SW-9D",
+  "extraction": "required_road_corridor_only",
+  "included_routes": [
+    "tin_kwong_1",
+    "tin_kwong_2",
+    "tin_kwong_3"
+  ],
+  "excluded": "unused_area_of_source_sheet",
+  "format": "assetto_corsa_source_sheet_models",
+  "hard_file_limit_bytes": 2000000000,
+  "target_file_limit_bytes": 1500000000,
+  "sheet_boundary_source": "HP1C original survey sheet",
+  "split_policy": {
+    "condition": "source_sheet_model_over_2GB",
+    "unsplit_name": "11-SW-9D",
+    "split_names": [
+      "11-SW-9D-1",
+      "11-SW-9D-2"
+    ],
+    "extension": ".kn5"
+  },
+  "sheets": [
+    {
+      "sheet": "11-SW-9D",
+      "model": "models/11-SW-9D.kn5",
+      "max_file_bytes": 1500000000,
+      "estimated_file_bytes": 0,
+      "content": "required_road_corridor_only",
+      "split_if_over_hard_limit": true,
+      "split_name_pattern": "11-SW-9D-{part}"
+    }
+  ],
+  "models_ini_order": [
+    "models/11-SW-9D.kn5"
+  ]
+}
