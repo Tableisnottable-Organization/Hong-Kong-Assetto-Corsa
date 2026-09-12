@@ -1,10 +1,14 @@
-# 香港天光道 Assetto Corsa 地圖
+# Hong Kong Assetto Corsa Map
 
-這個專案以測量圖組別 **HP1C**（圖幅 **11-SW-9D**）作為資料來源，按 HP1C 原有圖幅邊界輸出模型，只抽取天光道三條考試路線所需的道路走廊，不保存不需要的周邊區域。路線一、二、三共用已抽取的道路，避免重複建模。
+This project aims to create a full Hong Kong 1:1 map for Assetto Corsa. The long-term goal is to cover the entire territory as an accurate, drivable virtual environment, not just a single road or route.
 
-每個 HP1C 圖幅會輸出一個獨立的 KN5 模型，並由 `tile_manifest.json` 記錄圖幅和載入順序。Assetto Corsa 單一檔案的硬上限按 2 GB 處理；生成設定以 1.5 GB 作為目標上限，預留安全空間。
+The current work focuses on a realistic, data-driven prototype using surveyed mapping data and OpenStreetMap road geometry. The project is intentionally structured so it can scale from a small road corridor to a full-city map by splitting the world into HP1C tiles and exporting them as separate KN5 models.
 
-如果圖幅模型超過 2 GB，只分割該圖幅，並按以下格式命名：
+The initial prototype uses **HP1C** tile **11-SW-9D** as the test area and extracts only the needed road corridors for the Tin Kwong Road driving routes. This keeps the early stages manageable while establishing the workflow for a much larger map.
+
+Each HP1C tile produces an independent KN5 model, with `tile_manifest.json` recording the tile boundaries and load order. Assetto Corsa enforces a hard file size limit of 2 GB, so generation targets a practical cap around 1.5 GB to leave safe margin for export and runtime overhead.
+
+If a tile exceeds the limit, it is split into multiple files using the following naming pattern:
 
 ```text
 11-SW-9D.kn5
@@ -61,3 +65,15 @@ build\HP1C\source\
 ## 資料來源及範圍
 
 路線轉向順序及頁面中的座標錨點來自 [TODS 九龍考車路線](https://www.driving.com.hk/exam-routes-kowloon)。該頁面的資料於 2021 年更新；正式發布前應以現時道路測量資料重新校準道路位置、方向及交通設施。
+
+## Credit / 資源致謝
+
+本專案使用及參考以下資源：
+
+- 考試路線資料及轉向點 — 供路線順序與路口判讀參考。
+- 地圖圖層與街道參考資料 — 供人工核對道路形狀、街道佈局及環境特徵；本專案不會自動抓取外部地圖內容。
+- OpenStreetMap (OSM) / Overpass API — 供道路幾何及地理資料的基礎參考，並由本專案自動下載為 GeoJSON / OSM 來源資料。
+- HP1C 測量圖 / 11-SW-9D 圖幅 — 作為土地測量和圖幅邊界基礎資料，控制模型分區與輸出範圍。
+- 地圖製作工具與格式骨架 — 用於原型建模、輸出與最終地圖工程流程。
+
+本專案僅為非商業、研究與模組製作用途，所有資料源均保留其原始版權與使用條款。若正式發布或商業化，需先確認各資料來源的授權與使用要求，並在必要時取得適當許可。
