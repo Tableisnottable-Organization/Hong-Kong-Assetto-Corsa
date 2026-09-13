@@ -118,9 +118,17 @@ The default server is private (`REGISTER_TO_LOBBY=0`) until the track has been t
 
 ## Vehicles and licensing / 車輛與授權
 
-The first hero vehicle is an original Hong Kong Crown Comfort taxi model. Additional traffic vehicles are tracked in `config/vehicles.json`. Do not rip assets from commercial games or use unlicensed manufacturer CAD. Keep OSM attribution with every exported release, and treat real-world branding as replaceable until permission is available.
+The first hero vehicle is an original Hong Kong Crown Comfort taxi model. Additional traffic vehicles are tracked in `config/vehicles.json`, including a prototype Hong Kong double-decker bus asset in `asset/vehicles/hk_double_decker_bus/`. Do not rip assets from commercial games or use unlicensed manufacturer CAD. Keep OSM attribution with every exported release, and treat real-world branding as replaceable until permission is available.
 
-首部主角車是原創香港皇冠計程車模型。其他車流車輛列於 `config/vehicles.json`。不要從商業遊戲中盜用資產，也不要使用未授權的製造商 CAD。每次導出正式版本時，請保留 OSM 歸屬資訊；真實世界品牌在未取得授權前視為可替換。
+首部主角車是原創香港皇冠計程車模型。其他車流車輛列於 `config/vehicles.json`，其中也包括位於 `asset/vehicles/hk_double_decker_bus/` 的香港雙層巴士原型資產。不要從商業遊戲中盜用資產，也不要使用未授權的製造商 CAD。每次導出正式版本時，請保留 OSM 歸屬資訊；真實世界品牌在未取得授權前視為可替換。
+
+The ACROSS bus-model catalog used for traffic planning is stored in `docs/across/`. It contains the exact ACROSS operator name, internal record ID, model name, fleet/type prefix where available, and source URL for all records currently listed by the site. Regenerate it with:
+
+```powershell
+python .\tools\across_catalog.py --output .\build\across --cache .\build\across-cache
+```
+
+For a compact view, use `docs/across/across_code_counts.csv`. It aggregates each operator and fleet/type code (for example `KMB,E5T`, `KMB,E6X`, or `KMB,E6M`) and reports the number of fleet entries displayed by ACROSS, rather than printing every vehicle. These counts can include historical, spare, training, or retired entries when ACROSS includes them on a model page; they are not a claim about the operator's current active fleet.
 
 ## Data sources and references / 資料來源及範圍
 

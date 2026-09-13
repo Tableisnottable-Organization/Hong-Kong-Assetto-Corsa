@@ -51,8 +51,15 @@
       "display_name": "Hong Kong double-decker bus type",
       "role": "traffic",
       "priority": 3,
-      "source_status": "original_model_required",
-      "target_lods": ["lod_b", "lod_c"]
+      "source_status": "prototype_asset_created",
+      "target_lods": ["lod_b", "lod_c"],
+      "asset_path": "asset/vehicles/hk_double_decker_bus",
+      "prototype_dimensions": {
+        "length_m": 10.6,
+        "height_m": 5.2,
+        "width_m": 2.55
+      },
+      "notes": "Low-poly prototype based on a Hong Kong double-decker silhouette for iterative Assetto Corsa work."
     }
   ]
 }
