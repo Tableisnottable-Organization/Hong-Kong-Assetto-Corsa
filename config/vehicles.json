@@ -1,5 +1,17 @@
 {
   "project": "hk_kowloon",
+  "traffic_mix": {
+    "private": 60,
+    "commercial": 25,
+    "public_special": 15,
+    "excluded": [
+      "bus",
+      "coach",
+      "double_decker_bus",
+      "single_decker_bus",
+      "minibus"
+    ]
+  },
   "policy": {
     "source_geometry_must_be_redistributable": true,
     "branding_is_replaceable": true,
@@ -9,6 +21,7 @@
     {
       "id": "hk_taxi_crown_comfort",
       "display_name": "Hong Kong taxi - Crown Comfort type",
+      "category": "commercial",
       "role": "hero",
       "priority": 1,
       "source_status": "original_model_required",
@@ -23,37 +36,175 @@
       ]
     },
     {
-      "id": "hk_family_van",
-      "display_name": "Hong Kong family MPV",
+      "id": "hk_private_compact_sedan",
+      "display_name": "Hong Kong compact private sedan",
+      "category": "private",
       "role": "traffic",
       "priority": 2,
       "source_status": "original_model_required",
       "target_lods": ["lod_b", "lod_c"]
     },
     {
-      "id": "hk_compact_sedan",
-      "display_name": "Hong Kong compact sedan",
+      "id": "hk_private_family_sedan",
+      "display_name": "Hong Kong family private sedan",
+      "category": "private",
       "role": "traffic",
       "priority": 2,
       "source_status": "original_model_required",
       "target_lods": ["lod_b", "lod_c"]
     },
     {
-      "id": "hk_light_goods_vehicle",
-      "display_name": "Hong Kong light goods vehicle",
+      "id": "hk_private_hatchback",
+      "display_name": "Hong Kong private hatchback",
+      "category": "private",
+      "role": "traffic",
+      "priority": 2,
+      "source_status": "original_model_required",
+      "target_lods": ["lod_b", "lod_c"]
+    },
+    {
+      "id": "hk_private_compact_suv",
+      "display_name": "Hong Kong private compact SUV",
+      "category": "private",
+      "role": "traffic",
+      "priority": 2,
+      "source_status": "original_model_required",
+      "target_lods": ["lod_b", "lod_c"]
+    },
+    {
+      "id": "hk_private_luxury_sedan",
+      "display_name": "Hong Kong private luxury sedan",
+      "category": "private",
       "role": "traffic",
       "priority": 3,
       "source_status": "original_model_required",
       "target_lods": ["lod_b", "lod_c"]
     },
     {
-      "id": "hk_double_decker_bus",
-      "display_name": "Hong Kong double-decker bus type",
+      "id": "hk_private_luxury_suv",
+      "display_name": "Hong Kong private luxury SUV",
+      "category": "private",
       "role": "traffic",
       "priority": 3,
+      "source_status": "original_model_required",
+      "target_lods": ["lod_b", "lod_c"]
+    },
+    {
+      "id": "hk_private_mpv",
+      "display_name": "Hong Kong private MPV",
+      "category": "private",
+      "role": "traffic",
+      "priority": 2,
+      "source_status": "original_model_required",
+      "target_lods": ["lod_b", "lod_c"]
+    },
+    {
+      "id": "hk_private_ev_sedan",
+      "display_name": "Hong Kong private electric sedan",
+      "category": "private",
+      "role": "traffic",
+      "priority": 3,
+      "source_status": "original_model_required",
+      "target_lods": ["lod_b", "lod_c"]
+    },
+    {
+      "id": "hk_private_ev_suv",
+      "display_name": "Hong Kong private electric SUV",
+      "category": "private",
+      "role": "traffic",
+      "priority": 3,
+      "source_status": "original_model_required",
+      "target_lods": ["lod_b", "lod_c"]
+    },
+    {
+      "id": "hk_private_sports_sedan",
+      "display_name": "Hong Kong private performance sedan",
+      "category": "private",
+      "role": "traffic",
+      "priority": 4,
+      "source_status": "original_model_required",
+      "target_lods": ["lod_b", "lod_c"]
+    },
+    {
+      "id": "hk_private_four_by_four",
+      "display_name": "Hong Kong private four-wheel-drive vehicle",
+      "category": "private",
+      "role": "traffic",
+      "priority": 4,
+      "source_status": "original_model_required",
+      "target_lods": ["lod_b", "lod_c"]
+    },
+    {
+      "id": "hk_private_station_wagon",
+      "display_name": "Hong Kong private station wagon",
+      "category": "private",
+      "role": "traffic",
+      "priority": 4,
+      "source_status": "original_model_required",
+      "target_lods": ["lod_b", "lod_c"]
+    },
+    {
+      "id": "hk_goods_van",
+      "display_name": "Hong Kong light goods van",
+      "category": "commercial",
+      "role": "traffic",
+      "priority": 2,
+      "source_status": "original_model_required",
+      "target_lods": ["lod_b", "lod_c"]
+    },
+    {
+      "id": "hk_panel_van",
+      "display_name": "Hong Kong panel van",
+      "category": "commercial",
+      "role": "traffic",
+      "priority": 2,
+      "source_status": "original_model_required",
+      "target_lods": ["lod_b", "lod_c"]
+    },
+    {
+      "id": "hk_light_truck",
+      "display_name": "Hong Kong light goods truck",
+      "category": "commercial",
+      "role": "traffic",
+      "priority": 3,
+      "source_status": "original_model_required",
+      "target_lods": ["lod_b", "lod_c"]
+    },
+    {
+      "id": "hk_refrigerated_truck",
+      "display_name": "Hong Kong refrigerated delivery truck",
+      "category": "commercial",
+      "role": "traffic",
+      "priority": 3,
+      "source_status": "original_model_required",
+      "target_lods": ["lod_b", "lod_c"]
+    },
+    {
+      "id": "hk_police_sedan",
+      "display_name": "Hong Kong police patrol sedan",
+      "category": "public_special",
+      "role": "traffic",
+      "priority": 4,
+      "source_status": "original_model_required",
+      "target_lods": ["lod_b", "lod_c"]
+    },
+    {
+      "id": "hk_ambulance",
+      "display_name": "Hong Kong ambulance van",
+      "category": "public_special",
+      "role": "traffic",
+      "priority": 4,
+      "source_status": "original_model_required",
+      "target_lods": ["lod_b", "lod_c"]
+    },
+    {
+      "id": "hk_fire_engine",
+      "display_name": "Hong Kong fire engine",
+      "category": "public_special",
+      "role": "traffic",
+      "priority": 4,
       "source_status": "original_model_required",
       "target_lods": ["lod_b", "lod_c"]
     }
   ]
 }
-

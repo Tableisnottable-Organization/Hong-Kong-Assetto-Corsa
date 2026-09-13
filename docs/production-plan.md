@@ -37,6 +37,9 @@ chunks so that visibility, collision, and iteration remain manageable.
 ## 3. Vehicle pipeline
 
 The project needs many traffic vehicles, but they should be added in batches.
+The target traffic mix is 60% private cars, 25% commercial vehicles, and 15%
+public or special vehicles. Buses, coaches, double-deckers, and minibuses are
+explicitly excluded from this project.
 Each vehicle should have:
 
 - original source geometry or a redistribution-compatible license;
@@ -80,4 +83,3 @@ the intended fleet and implementation order.
 5. Build the taxi and validate the car export independently.
 6. Add common Hong Kong traffic vehicles in priority batches.
 7. Replace greybox landmarks with optimized authored assets.
-
