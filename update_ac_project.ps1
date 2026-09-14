@@ -1,4 +1,4 @@
-﻿# Assetto Corsa Pipeline with Explicit Steam Blender Path
+﻿# Assetto Corsa Pipeline - Export FBX & Save Checkable .blend File
 $ErrorActionPreference = "Continue"
 
 function Write-StepHeader($stepNum, $title, $color) {
@@ -13,7 +13,7 @@ git config --global http.postBuffer 524288000
 Write-Host "Stage 1 completed." -ForegroundColor Green
 
 # --- Stage 2: Background Blender Execution ---
-Write-StepHeader "Stage 2" "2. Run Blender Background Process" Green
+Write-StepHeader "Stage 2" "2. Run Blender & Generate .blend + .fbx" Green
 
 # Generate Python script for Blender
 $blenderPipeline = @"
@@ -37,7 +37,13 @@ def run_map_pipeline():
     
     if not target_obj.modifiers.get('AC_Road_GeoNodes'):
         target_obj.modifiers.new(name='AC_Road_GeoNodes', type='NODES')
+
+    # 1. Save .blend file for manual checking
+    blend_output_path = os.path.abspath('./track_check.blend')
+    bpy.ops.wm.save_as_mainfile(filepath=blend_output_path)
+    print('[BLENDER SAVE SUCCESS] .blend file saved to:', blend_output_path)
             
+    # 2. Export FBX for SDK
     export_path = os.path.abspath('./sdk_output/track_mesh.fbx')
     os.makedirs(os.path.dirname(export_path), exist_ok=True)
     
@@ -47,7 +53,7 @@ def run_map_pipeline():
         axis_forward='-Z',
         axis_up='Y'
     )
-    print('[BLENDER EXPORT SUCCESS] File exported to:', export_path)
+    print('[BLENDER EXPORT SUCCESS] FBX exported to:', export_path)
 
 if __name__ == '__main__':
     run_map_pipeline()
@@ -69,7 +75,7 @@ if (Test-Path $blenderExe) {
     }
     Write-Host "Blender execution finished." -ForegroundColor Green
 } else {
-    Write-Host "[ERROR] Could not find Blender at $blenderExe. Please check drive connection." -ForegroundColor Red
+    Write-Host "[ERROR] Could not find Blender at $blenderExe." -ForegroundColor Red
 }
 
 # --- Stage 3: SDK Check ---
@@ -83,7 +89,7 @@ try {
     git fetch --all
     git pull
     git add .
-    git commit -m "Auto-generated track_mesh.fbx using Steam Blender background process"
+    git commit -m "Generated track_check.blend and track_mesh.fbx for map review"
     git push
     Write-Host "Git repository synchronized successfully." -ForegroundColor Green
 } catch {

@@ -18,7 +18,13 @@ def run_map_pipeline():
     
     if not target_obj.modifiers.get('AC_Road_GeoNodes'):
         target_obj.modifiers.new(name='AC_Road_GeoNodes', type='NODES')
+
+    # 1. Save .blend file for manual checking
+    blend_output_path = os.path.abspath('./track_check.blend')
+    bpy.ops.wm.save_as_mainfile(filepath=blend_output_path)
+    print('[BLENDER SAVE SUCCESS] .blend file saved to:', blend_output_path)
             
+    # 2. Export FBX for SDK
     export_path = os.path.abspath('./sdk_output/track_mesh.fbx')
     os.makedirs(os.path.dirname(export_path), exist_ok=True)
     
@@ -28,7 +34,7 @@ def run_map_pipeline():
         axis_forward='-Z',
         axis_up='Y'
     )
-    print('[BLENDER EXPORT SUCCESS] File exported to:', export_path)
+    print('[BLENDER EXPORT SUCCESS] FBX exported to:', export_path)
 
 if __name__ == '__main__':
     run_map_pipeline()
