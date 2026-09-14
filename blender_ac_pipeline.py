@@ -1,4 +1,5 @@
 ﻿import bpy, os
+
 def process_and_export():
     obj = bpy.context.active_object
     if obj:

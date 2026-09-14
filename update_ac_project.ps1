@@ -1,4 +1,4 @@
-﻿# Assetto Corsa 4-Stage Pipeline Script (Bypass Winget)
+﻿# Assetto Corsa 4-Stage Pipeline Script with Blender Auto-Exec
 $ErrorActionPreference = "Continue"
 
 function Write-StepHeader($stepNum, $title, $color) {
@@ -18,10 +18,11 @@ try {
     Write-Host "Stage 1 warning: $_" -ForegroundColor Yellow
 }
 
-# --- 2. Transfer to Blender ---
+# --- 2. Transfer to Blender & Generate Mesh ---
 Write-StepHeader "Stage 2" "2. Transfer to Blender" Green
 $blenderPipeline = @"
 import bpy, os
+
 def process_and_export():
     obj = bpy.context.active_object
     if obj:
@@ -45,6 +46,15 @@ if __name__ == '__main__':
 "@
 $blenderPipeline | Out-File -FilePath "blender_ac_pipeline.py" -Encoding utf8
 Write-Host "blender_ac_pipeline.py created." -ForegroundColor Yellow
+
+# Try running Blender in background if installed
+$blenderExe = Get-Command "blender" -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Source
+if ($blenderExe) {
+    Write-Host "Running Blender background script..." -ForegroundColor Gray
+    Start-Process -FilePath $blenderExe -ArgumentList "-b -P blender_ac_pipeline.py" -Wait -NoNewWindow
+} else {
+    Write-Host "Blender executable not in PATH. Skipping background execution." -ForegroundColor Yellow
+}
 
 # --- 3. Export to SDK ---
 Write-StepHeader "Stage 3" "3. Export to SDK Directory" Yellow
