@@ -1,4 +1,4 @@
-﻿# Assetto Corsa Pipeline with Explicit Blender Path Execution
+﻿# Assetto Corsa Pipeline with Explicit Steam Blender Path
 $ErrorActionPreference = "Continue"
 
 function Write-StepHeader($stepNum, $title, $color) {
@@ -54,25 +54,11 @@ if __name__ == '__main__':
 "@
 $blenderPipeline | Out-File -FilePath "blender_ac_pipeline.py" -Encoding utf8
 
-# Explicitly search for Blender executable across all drives and system registry
-$blenderExe = Get-Command "blender" -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Source
+# Explicit Steam Blender executable path
+$blenderExe = "A:\SteamLibrary\steamapps\common\Blender\blender.exe"
 
-if (-not $blenderExe) {
-    $possiblePaths = @(
-        "C:\Program Files\Blender Foundation\Blender 4.2\blender.exe",
-        "C:\Program Files\Blender Foundation\Blender 4.1\blender.exe",
-        "C:\Program Files\Blender Foundation\Blender 4.0\blender.exe",
-        "C:\Program Files\Blender Foundation\Blender 3.6\blender.exe",
-        "C:\Program Files\Blender Foundation\Blender\blender.exe",
-        "D:\Program Files\Blender Foundation\Blender\blender.exe"
-    )
-    foreach ($path in $possiblePaths) {
-        if (Test-Path $path) { $blenderExe = $path; break }
-    }
-}
-
-if ($blenderExe) {
-    Write-Host "Found Blender executable at: $blenderExe" -ForegroundColor Cyan
+if (Test-Path $blenderExe) {
+    Write-Host "Found Steam Blender at: $blenderExe" -ForegroundColor Cyan
     Write-Host "Running Blender background process..." -ForegroundColor Gray
     
     $blendFile = Get-ChildItem -Path "." -Filter "*.blend" | Select-Object -First 1 -ExpandProperty Name
@@ -83,7 +69,7 @@ if ($blenderExe) {
     }
     Write-Host "Blender execution finished." -ForegroundColor Green
 } else {
-    Write-Host "[ERROR] Blender executable not found! Please ensure Blender is installed." -ForegroundColor Red
+    Write-Host "[ERROR] Could not find Blender at $blenderExe. Please check drive connection." -ForegroundColor Red
 }
 
 # --- Stage 3: SDK Check ---
@@ -97,7 +83,7 @@ try {
     git fetch --all
     git pull
     git add .
-    git commit -m "Auto-generated track_mesh.fbx via background Blender"
+    git commit -m "Auto-generated track_mesh.fbx using Steam Blender background process"
     git push
     Write-Host "Git repository synchronized successfully." -ForegroundColor Green
 } catch {
