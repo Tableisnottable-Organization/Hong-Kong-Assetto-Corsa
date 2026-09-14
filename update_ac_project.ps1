@@ -1,4 +1,4 @@
-﻿# Assetto Corsa Pipeline with Background Blender Execution
+﻿# Assetto Corsa Pipeline with Fixed Background Blender FBX Export
 $ErrorActionPreference = "Continue"
 
 function Write-StepHeader($stepNum, $title, $color) {
@@ -16,7 +16,7 @@ Write-Host "Stage 1 completed." -ForegroundColor Green
 # --- Stage 2: Background Blender Map Execution ---
 Write-StepHeader "Stage 2" "2. Run Blender in Background (-b)" Green
 
-# 1. Generate Python automation script for Blender
+# 1. Improved Python automation script for Blender
 $blenderPipeline = @"
 import bpy, os
 
@@ -25,18 +25,23 @@ def run_map_pipeline():
     bpy.context.scene.unit_settings.system = 'METRIC'
     bpy.context.scene.unit_settings.scale_length = 1.0
 
-    # Locate active mesh or create base terrain grid
-    obj = bpy.context.active_object
-    if not obj:
+    # Ensure a mesh exists in background mode
+    if len(bpy.data.objects) == 0 or not any(o.type == 'MESH' for o in bpy.data.objects):
         bpy.ops.mesh.primitive_grid_add(x_subdivisions=100, y_subdivisions=100, size=500)
-        obj = bpy.context.active_object
-
-    # Kunos physics naming convention
-    obj.name = '1ROAD_main'
+    
+    # Select first available mesh object
+    mesh_objs = [o for o in bpy.data.objects if o.type == 'MESH']
+    for o in bpy.data.objects:
+        o.select_set(False)
+    
+    target_obj = mesh_objs[0]
+    target_obj.select_set(True)
+    bpy.context.view_layer.objects.active = target_obj
+    target_obj.name = '1ROAD_main'
     
     # Attach Geometry Nodes modifier for road mesh curve
-    if not obj.modifiers.get('AC_Road_GeoNodes'):
-        obj.modifiers.new(name='AC_Road_GeoNodes', type='NODES')
+    if not target_obj.modifiers.get('AC_Road_GeoNodes'):
+        target_obj.modifiers.new(name='AC_Road_GeoNodes', type='NODES')
             
     # Export FBX mesh for AC SDK (ksEditor)
     export_path = os.path.abspath('./sdk_output/track_mesh.fbx')
@@ -60,7 +65,6 @@ Write-Host "Generated 'blender_ac_pipeline.py'." -ForegroundColor Yellow
 $blenderExe = Get-Command "blender" -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Source
 
 if (-not $blenderExe) {
-    # Check default Windows installation paths if blender is not in PATH
     $defaultPaths = @(
         "C:\Program Files\Blender Foundation\Blender 4.2\blender.exe",
         "C:\Program Files\Blender Foundation\Blender 4.1\blender.exe",
@@ -72,13 +76,21 @@ if (-not $blenderExe) {
     }
 }
 
+# 3. Check for existing .blend file in current directory
+$blendFile = Get-ChildItem -Path "." -Filter "*.blend" | Select-Object -First 1 -ExpandProperty Name
+
 if ($blenderExe) {
     Write-Host "Executing Blender in Background using: $blenderExe" -ForegroundColor Cyan
-    # Run Blender headlessly (-b) and execute script (-P)
-    Start-Process -FilePath $blenderExe -ArgumentList "-b -P blender_ac_pipeline.py" -Wait -NoNewWindow
+    if ($blendFile) {
+        Write-Host "Found Blend file: $blendFile. Executing background script on it..." -ForegroundColor Gray
+        Start-Process -FilePath $blenderExe -ArgumentList "-b `"$blendFile`" -P blender_ac_pipeline.py" -Wait -NoNewWindow
+    } else {
+        Write-Host "No .blend file found. Creating base scene in background..." -ForegroundColor Gray
+        Start-Process -FilePath $blenderExe -ArgumentList "-b -P blender_ac_pipeline.py" -Wait -NoNewWindow
+    }
     Write-Host "Blender background processing completed." -ForegroundColor Green
 } else {
-    Write-Host "Blender executable not found in PATH or standard directories. Please add Blender to System PATH." -ForegroundColor Red
+    Write-Host "Blender executable not found in PATH or standard directories." -ForegroundColor Red
 }
 
 # --- Stage 3: Export to SDK ---
@@ -93,11 +105,11 @@ try {
     git fetch --all
     git pull
     git add .
-    git commit -m "Background Blender: Auto-processed 3D map and synced FBX to SDK"
+    git commit -m "Fix Background Blender FBX Export: Created track_mesh.fbx in sdk_output"
     git push
     Write-Host "Git repository synchronized successfully." -ForegroundColor Green
 } catch {
     Write-Host "Git sync notice: $_" -ForegroundColor Red
 }
 
-Write-Host "`n[COMPLETED] All 4 stages finished successfully!" -ForegroundColor Cyan
+Write-Host "`n[COMPLETED] Pipeline execution finished!" -ForegroundColor Cyan
