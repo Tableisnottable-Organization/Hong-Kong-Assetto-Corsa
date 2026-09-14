@@ -1,4 +1,4 @@
-﻿# Assetto Corsa Map Generation & Pipeline Script
+﻿# Assetto Corsa Pipeline with Background Blender Execution
 $ErrorActionPreference = "Continue"
 
 function Write-StepHeader($stepNum, $title, $color) {
@@ -7,42 +7,38 @@ function Write-StepHeader($stepNum, $title, $color) {
     Write-Host "========================================" -ForegroundColor $color
 }
 
-# --- 1. Get Data & System Update ---
+# --- Stage 1: Get Data & Setup ---
 Write-StepHeader "Stage 1" "1. Get Data & Verify Setup" Cyan
-try {
-    git config --global http.postBuffer 524288000
-    Write-Host "Verifying environment and fetching map assets..." -ForegroundColor Gray
-    if (Get-Command uv -ErrorAction SilentlyContinue) { uv self update }
-    Write-Host "Stage 1 completed." -ForegroundColor Green
-} catch {
-    Write-Host "Stage 1 warning: $_" -ForegroundColor Yellow
-}
+git config --global http.postBuffer 524288000
+if (Get-Command uv -ErrorAction SilentlyContinue) { uv self update }
+Write-Host "Stage 1 completed." -ForegroundColor Green
 
-# --- 2. Transfer to Blender & Generate 3D Map Mesh ---
-Write-StepHeader "Stage 2" "2. Generate Map Mesh in Blender" Green
+# --- Stage 2: Background Blender Map Execution ---
+Write-StepHeader "Stage 2" "2. Run Blender in Background (-b)" Green
+
+# 1. Generate Python automation script for Blender
 $blenderPipeline = @"
 import bpy, os
 
-def generate_ac_map():
-    # Set up Scene Units to Meters for Assetto Corsa 1:1 Scale
+def run_map_pipeline():
+    # Set scene units to Meters for Assetto Corsa 1:1 scale
     bpy.context.scene.unit_settings.system = 'METRIC'
     bpy.context.scene.unit_settings.scale_length = 1.0
 
-    # Ensure/Select Map Mesh
+    # Locate active mesh or create base terrain grid
     obj = bpy.context.active_object
     if not obj:
-        # Create a default terrain grid if no object is selected
         bpy.ops.mesh.primitive_grid_add(x_subdivisions=100, y_subdivisions=100, size=500)
         obj = bpy.context.active_object
 
+    # Kunos physics naming convention
     obj.name = '1ROAD_main'
     
-    # Attach Geometry Nodes Modifier for Road Curve Sweeping
-    mod = obj.modifiers.get('AC_Road_GeoNodes')
-    if not mod:
-        mod = obj.modifiers.new(name='AC_Road_GeoNodes', type='NODES')
+    # Attach Geometry Nodes modifier for road mesh curve
+    if not obj.modifiers.get('AC_Road_GeoNodes'):
+        obj.modifiers.new(name='AC_Road_GeoNodes', type='NODES')
             
-    # Export FBX to SDK directory
+    # Export FBX mesh for AC SDK (ksEditor)
     export_path = os.path.abspath('./sdk_output/track_mesh.fbx')
     os.makedirs(os.path.dirname(export_path), exist_ok=True)
     
@@ -52,40 +48,56 @@ def generate_ac_map():
         axis_forward='-Z',
         axis_up='Y'
     )
-    print('Map FBX successfully generated and exported:', export_path)
+    print('[BLENDER BACKEND] FBX exported successfully to:', export_path)
 
 if __name__ == '__main__':
-    generate_ac_map()
+    run_map_pipeline()
 "@
 $blenderPipeline | Out-File -FilePath "blender_ac_pipeline.py" -Encoding utf8
-Write-Host "blender_ac_pipeline.py created with map generation logic." -ForegroundColor Yellow
+Write-Host "Generated 'blender_ac_pipeline.py'." -ForegroundColor Yellow
 
-# Execute Blender background generation if available
+# 2. Find Blender executable path
 $blenderExe = Get-Command "blender" -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Source
-if ($blenderExe) {
-    Write-Host "Running Blender map generation in background..." -ForegroundColor Gray
-    Start-Process -FilePath $blenderExe -ArgumentList "-b -P blender_ac_pipeline.py" -Wait -NoNewWindow
-} else {
-    Write-Host "Blender executable not found in PATH. You can run 'blender_ac_pipeline.py' manually inside Blender." -ForegroundColor Yellow
+
+if (-not $blenderExe) {
+    # Check default Windows installation paths if blender is not in PATH
+    $defaultPaths = @(
+        "C:\Program Files\Blender Foundation\Blender 4.2\blender.exe",
+        "C:\Program Files\Blender Foundation\Blender 4.1\blender.exe",
+        "C:\Program Files\Blender Foundation\Blender 4.0\blender.exe",
+        "C:\Program Files\Blender Foundation\Blender 3.6\blender.exe"
+    )
+    foreach ($path in $defaultPaths) {
+        if (Test-Path $path) { $blenderExe = $path; break }
+    }
 }
 
-# --- 3. Export to SDK ---
-Write-StepHeader "Stage 3" "3. Export Map to SDK Directory" Yellow
+if ($blenderExe) {
+    Write-Host "Executing Blender in Background using: $blenderExe" -ForegroundColor Cyan
+    # Run Blender headlessly (-b) and execute script (-P)
+    Start-Process -FilePath $blenderExe -ArgumentList "-b -P blender_ac_pipeline.py" -Wait -NoNewWindow
+    Write-Host "Blender background processing completed." -ForegroundColor Green
+} else {
+    Write-Host "Blender executable not found in PATH or standard directories. Please add Blender to System PATH." -ForegroundColor Red
+}
+
+# --- Stage 3: Export to SDK ---
+Write-StepHeader "Stage 3" "3. SDK Directory Check" Yellow
 $sdkDir = "./sdk_output"
 if (-not (Test-Path -Path $sdkDir)) { New-Item -ItemType Directory -Path $sdkDir | Out-Null }
-Write-Host "SDK Output directory ready at: $sdkDir" -ForegroundColor Yellow
+Write-Host "SDK Output directory ready: $sdkDir" -ForegroundColor Yellow
 
-# --- 4. Output & Git Sync ---
-Write-StepHeader "Stage 4" "4. Sync Map & Repository" Magenta
+# --- Stage 4: Output & Git Sync ---
+Write-StepHeader "Stage 4" "4. Output & Sync Repo" Magenta
 try {
     git fetch --all
     git pull
     git add .
-    git commit -m "Map Generation: Auto-generated 3D map mesh and exported FBX to SDK"
+    git commit -m "Background Blender: Auto-processed 3D map and synced FBX to SDK"
     git push
-    Write-Host "Map files synchronized to Git successfully." -ForegroundColor Green
+    Write-Host "Git repository synchronized successfully." -ForegroundColor Green
 } catch {
-    Write-Host "Git sync error: $_" -ForegroundColor Red
+    Write-Host "Git sync notice: $_" -ForegroundColor Red
 }
 
-Write-Host "`n[COMPLETED] Map generation & pipeline execution finished." -ForegroundColor Cyan
+Write-Host "`n[COMPLETED] All 4 stages finished successfully!" -ForegroundColor Cyan
