@@ -21,3 +21,9 @@ All automation build scripts, configuration templates, and web interfaces are lo
 - **Prompt (Input):** ~2,300 tokens
 - **Completion (Output):** ~120 tokens
 - **Total:** ~2,420 tokens
+
+---
+📊 **Token Counter (Estimate)**
+- **Prompt (Input):** ~3,950 tokens
+- **Completion (Output):** ~140 tokens
+- **Total:** ~4,090 tokens
