@@ -16,14 +16,4 @@ We are currently conducting simulation testing with actual Hong Kong driving tes
 All automation build scripts, configuration templates, and web interfaces are located in uto/v1/:
 * uto/v1/build_and_deploy.ps1: 一鍵以管理員權限構建並部署 .kn5 到 Assetto Corsa。
 * uto/v1/web/: 結合 CSDI 7 階段流程圖層的 Web Geoportal 界面與車輛規格頁面。
----
-📊 **Token Counter (Estimate)**
-- **Prompt (Input):** ~2,300 tokens
-- **Completion (Output):** ~120 tokens
-- **Total:** ~2,420 tokens
 
----
-📊 **Token Counter (Estimate)**
-- **Prompt (Input):** ~3,950 tokens
-- **Completion (Output):** ~140 tokens
-- **Total:** ~4,090 tokens
